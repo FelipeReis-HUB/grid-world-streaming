@@ -1,0 +1,175 @@
+/* style.css — Identidade visual "setor de vigilância" (arcade escuro)
+   Escolha deliberada de tema único (não claro/escuro adaptativo): a cena é
+   uma tela de radar/arcade, então o visual escuro com glow neon é parte do
+   conceito, não uma preferência de sistema. */
+
+:root {
+  --bg: #0b0e14;
+  --panel: #11151d;
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --ink: #e6e9ef;
+  --muted: #8b93a3;
+  --accent: #4fd1c5;
+  --accent-warm: #f5a623;
+  --danger: #ef4565;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  padding-inline: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.game-shell {
+  width: 100%;
+  max-width: 720px;
+  padding-block: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+header h1 {
+  font-family: 'Press Start 2P', 'JetBrains Mono', monospace;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  line-height: 1.5;
+  margin: 0 0 8px;
+  color: var(--accent);
+  text-shadow: 0 0 12px rgba(79, 209, 197, 0.45);
+  text-wrap: balance;
+}
+
+header .subtitle {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.hud-bar {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+}
+
+.hud-bar .stat { display: flex; gap: 6px; align-items: center; }
+.hud-bar .stat .label { color: var(--muted); letter-spacing: 0.04em; }
+.hud-bar .stat .value { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.stat-health { min-width: 150px; }
+.health-track {
+  width: 64px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.health-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #2fbf71, #4fd1c5);
+  transition: width 0.15s ease-out;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 960 / 600;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 20px 40px -20px rgba(0,0,0,0.6);
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 14, 20, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay-card {
+  text-align: center;
+  padding: 24px 28px;
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  background: var(--panel);
+  max-width: 320px;
+}
+
+.overlay-card h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  color: var(--accent-warm);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.overlay-card p {
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+#restart-btn {
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: var(--accent);
+  color: #06211f;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+#restart-btn:hover { filter: brightness(1.08); }
+#restart-btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+footer.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  border-top: 1px solid var(--panel-border);
+  padding-top: 12px;
+}
+
+footer.legend kbd {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--ink);
+  font-family: inherit;
+}
+
+@media (max-width: 480px) {
+  header h1 { font-size: 0.95rem; }
+  .hud-bar { font-size: 0.75rem; gap: 12px; }
+  footer.legend { font-size: 0.68rem; gap: 6px 14px; }
+}

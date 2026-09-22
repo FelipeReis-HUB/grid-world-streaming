@@ -1,0 +1,48 @@
+<title>Setor Ativo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=JetBrains+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="style.css">
+
+<div class="game-shell">
+  <header>
+    <h1>SETOR ATIVO</h1>
+    <p class="subtitle">Malha 3×3 de áreas · viewport independente da grade · NPCs só pensam quando o setor deles está ativo.</p>
+  </header>
+
+  <div class="hud-bar">
+    <div class="stat"><span class="label">NÚCLEOS</span><span class="value" id="hud-score">0/0</span></div>
+    <div class="stat stat-health">
+      <span class="label">SAÚDE</span>
+      <span class="health-track"><span class="health-fill" id="hud-health-fill"></span></span>
+      <span class="value" id="hud-health-value">100/100</span>
+    </div>
+    <div class="stat"><span class="label">➕</span><span class="value" id="hud-medkits">0</span></div>
+    <div class="stat"><span class="label">⚡</span><span class="value" id="hud-ammo">0</span></div>
+  </div>
+
+  <div class="stage">
+    <canvas id="game" width="960" height="600" aria-label="Área de jogo"></canvas>
+    <div id="overlay" class="overlay" hidden>
+      <div class="overlay-card">
+        <h2 id="overlay-title">—</h2>
+        <p id="overlay-text">—</p>
+        <button id="restart-btn" type="button">Reiniciar (R)</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="legend">
+    <span><kbd>W A S D</kbd> / <kbd>&larr; &uarr; &darr; &rarr;</kbd> mover</span>
+    <span><kbd>1</kbd> usar kit médico ➕</span>
+    <span><kbd>2</kbd> usar munição ⚡ (dano em área)</span>
+    <span><kbd>M</kbd> debug</span>
+    <span><kbd>R</kbd> reiniciar</span>
+    <span>losango dourado = núcleo · caixa verde = kit · caixa amarela = munição · círculo vermelho = NPC perseguindo</span>
+  </footer>
+</div>
+
+<script src="js/grid.js"></script>
+<script src="js/items.js"></script>
+<script src="js/npc.js"></script>
+<script src="js/player.js"></script>
+<script src="js/viewport.js"></script>
+<script src="js/main.js"></script>
