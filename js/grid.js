@@ -53,18 +53,4 @@ class Grid {
     const row = Math.min(GRID_ROWS - 1, Math.max(0, Math.floor(y / AREA_H)));
     return this.areaAt(row, col);
   }
-
-  // Vizinhança de Chebyshev (8 direções): distância = max(|dRow|, |dCol|).
-  // Com radius=1 isso ativa a área atual + até 8 vizinhas (inclui diagonais);
-  // áreas de canto ativam menos vizinhas por estarem na borda da malha.
-  neighborsOf(area, radius = 1) {
-    const result = [];
-    for (let row = area.row - radius; row <= area.row + radius; row++) {
-      for (let col = area.col - radius; col <= area.col + radius; col++) {
-        const a = this.areaAt(row, col);
-        if (a) result.push(a);
-      }
-    }
-    return result;
-  }
 }

@@ -2,7 +2,8 @@
 //
 // Fluxo por frame:
 //   1. Atualiza o jogador (input) e a câmera (segue o jogador).
-//   2. Calcula o conjunto de áreas ativas (área atual + vizinhas).
+//   2. Calcula o conjunto de áreas ativas (as que a câmera enxerga, mais
+//      uma pequena folga; no máximo 4).
 //   3. Atualiza SÓ os NPCs e itens cujas áreas estão nesse conjunto — o
 //      restante do mundo fica "congelado" (nenhum custo de simulação).
 //   4. Desenha tudo (áreas ativas em destaque, inativas "apagadas") mais o
@@ -42,16 +43,20 @@
   let debugOverlay = true;
   let score = 0;
   let state = 'playing'; // 'playing' | 'win' | 'gameover'
-  let activeState = computeActiveAreas(grid, player, 1);
+  camera.follow(player);
+  let activeState = computeActiveAreas(grid, player, camera);
   let ammoBlast = null; // { x, y, startTime } — efeito visual da caixa de munição
 
   const AMMO_RADIUS = 220; // alcance do dano em área da caixa de munição
   const AMMO_DAMAGE = 35;  // 2 usos derrubam um NPC (60 de vida)
+  const SURVIVAL_TIME = 60; // segundos que o jogador precisa sobreviver
+  let timeLeft = SURVIVAL_TIME;
 
   const overlayEl = document.getElementById('overlay');
   const overlayTitle = document.getElementById('overlay-title');
   const overlayText = document.getElementById('overlay-text');
   const scoreEl = document.getElementById('hud-score');
+  const timerEl = document.getElementById('hud-timer');
   const healthValueEl = document.getElementById('hud-health-value');
   const healthFillEl = document.getElementById('hud-health-fill');
   const medkitsEl = document.getElementById('hud-medkits');
@@ -103,6 +108,7 @@
     player.invulnerableUntil = 0;
     ammoBlast = null;
     score = 0;
+    timeLeft = SURVIVAL_TIME;
     state = 'playing';
     overlayEl.hidden = true;
     updateHUD();
@@ -110,10 +116,17 @@
 
   function updateHUD() {
     scoreEl.textContent = `${score}/${totalItems}`;
+    updateTimerHUD();
     healthValueEl.textContent = `${player.health}/${player.maxHealth}`;
     healthFillEl.style.width = `${(player.health / player.maxHealth) * 100}%`;
     medkitsEl.textContent = String(player.medkits);
     ammoEl.textContent = String(player.ammo);
+  }
+
+  function updateTimerHUD() {
+    const secs = Math.ceil(timeLeft);
+    timerEl.textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`;
+    timerEl.classList.toggle('danger', secs <= 10);
   }
 
   function showOverlay(title, text) {
@@ -123,9 +136,18 @@
   }
 
   function update(dt, now) {
+    // Objetivo do nível: sobreviver até o cronômetro zerar.
+    timeLeft = Math.max(0, timeLeft - dt);
+    updateTimerHUD();
+    if (timeLeft === 0) {
+      state = 'win';
+      showOverlay('Você sobreviveu!', `Resistiu ${SURVIVAL_TIME} segundos e coletou ${score} de ${totalItems} núcleos. Pressione R para jogar de novo.`);
+      return;
+    }
+
     player.update(dt, input, WORLD_W, WORLD_H, now);
     camera.follow(player);
-    activeState = computeActiveAreas(grid, player, 1);
+    activeState = computeActiveAreas(grid, player, camera);
     const { activeIds } = activeState;
 
     // --- Ponto central do exercício -----------------------------------
@@ -141,7 +163,7 @@
         updateHUD();
         if (player.health <= 0) {
           state = 'gameover';
-          showOverlay('Fim de jogo', `Você coletou ${score} de ${totalItems} núcleos. Pressione R para tentar de novo.`);
+          showOverlay('Fim de jogo', `Você caiu faltando ${Math.ceil(timeLeft)} s. Pressione R para tentar de novo.`);
         }
       }
     }
@@ -153,10 +175,6 @@
       item.collected = true;
       if (item.type === ITEM_TYPES.SCORE) {
         score++;
-        if (score === totalItems) {
-          state = 'win';
-          showOverlay('Você venceu!', `Todos os ${totalItems} núcleos foram coletados. Pressione R para jogar de novo.`);
-        }
       } else if (item.type === ITEM_TYPES.MEDKIT) {
         player.medkits++;
       } else if (item.type === ITEM_TYPES.AMMO) {

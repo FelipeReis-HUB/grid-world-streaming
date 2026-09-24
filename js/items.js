@@ -7,7 +7,7 @@
 // Três tipos de item, todos representados pela mesma classe (só muda o
 // visual e o que acontece ao coletar — a lógica de "o que fazer com o
 // item" fica em main.js, não aqui):
-//   score  — losango dourado, conta para a condição de vitória.
+//   score  — losango dourado, pontuação (o nível é vencido sobrevivendo ao cronômetro).
 //   medkit — caixa de primeiros socorros (➕): vai para o inventário do
 //            jogador e cura ao ser USADA (tecla 1), não automaticamente.
 //   ammo   — caixa de munição (⚡): vai para o inventário e, ao ser usada
