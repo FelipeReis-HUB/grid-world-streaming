@@ -135,6 +135,14 @@ não fiquem parados enquanto o jogador está longe:
   pathfinding. Se o jogador escapar além de
   `leashRadius` (260px), o NPC desiste e volta a patrulhar.
 
+Cada área recebe **8 NPCs** (`NPCS_PER_AREA` em `main.js`), totalizando
+**72 inimigos** no mundo. Eles nascem distribuídos numa elipse ao redor do
+centro da área (35% da largura e da altura), o que mantém todos dentro da
+própria área e longe do ponto de partida do jogador: na área central, o
+inimigo mais próximo começa a 210px, fora do raio de detecção. O valor foi
+ajustado jogando: com 1 ou 2 NPCs por área o nível era fácil, com 5 ficou
+com dificuldade mediana, e 8 deixa o nível difícil, que foi o objetivo.
+
 Como descrito acima, a IA só roda (`update()` é chamado) quando a área de
 origem do NPC está ativa — um NPC "congelado" não faz detecção nem
 movimento algum.
@@ -193,7 +201,7 @@ parâmetros abaixo são os pontos de ajuste do jogo e os valores atuais:
 
 | Parâmetro | Onde | Valor atual |
 |---|---|---|
-| Inimigos por área | `main.js` (`npcCount`) | 1 ou 2 |
+| Inimigos por área | `main.js` (`NPCS_PER_AREA`) | 8 |
 | Tamanho das áreas | `grid.js` (`AREA_W`, `AREA_H`) | 800×600px |
 | Folga de ativação | `viewport.js` (`ACTIVATION_MARGIN_X/Y`) | 40×30px |
 | Dano por contato | `player.js` (`hit`) | 20 |

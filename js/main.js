@@ -16,13 +16,13 @@
   const VIEW_H = canvas.height;
 
   // --- Construção do mundo: 9 áreas, cada uma com seus próprios itens/NPCs
+  const NPCS_PER_AREA = 8;
   const grid = new Grid();
   let allNPCs = [];
   let allItems = [];
   grid.areas.forEach((area) => {
     allItems = allItems.concat(spawnItemsForArea(area));
-    const npcCount = area.terrain === 'rocky' ? 2 : 1;
-    allNPCs = allNPCs.concat(spawnNPCsForArea(area, npcCount));
+    allNPCs = allNPCs.concat(spawnNPCsForArea(area, NPCS_PER_AREA));
   });
   const scoreItems = allItems.filter((it) => it.type === ITEM_TYPES.SCORE);
   const totalItems = scoreItems.length;

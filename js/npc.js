@@ -135,11 +135,15 @@ class NPC {
   }
 }
 
+// Distribui os NPCs em uma elipse ao redor do centro da área (35% da
+// largura/altura), longe do centro, onde o jogador começa na área central.
 function spawnNPCsForArea(area, count) {
   const npcs = [];
   for (let i = 0; i < count; i++) {
-    const y = area.y + area.height * (0.3 + 0.4 * i);
-    const npc = new NPC(area.x + area.width / 2, y, area);
+    const angle = -Math.PI / 2 + (i / count) * Math.PI * 2;
+    const x = area.centerX + Math.cos(angle) * area.width * 0.35;
+    const y = area.centerY + Math.sin(angle) * area.height * 0.35;
+    const npc = new NPC(x, y, area);
     npcs.push(npc);
     area.npcs.push(npc);
   }
