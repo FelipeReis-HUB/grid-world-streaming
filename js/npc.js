@@ -30,9 +30,9 @@ class NPC {
     this.state = NPC_STATE.PATROL;
 
     this.patrolSpeed = 60;   // px/s
-    this.chaseSpeed = 110;   // px/s (mais rápido que a patrulha, mais lento que o jogador)
-    this.detectionRadius = 160;
-    this.leashRadius = 260;  // além desse raio, desiste e volta a patrulhar
+    this.chaseSpeed = 180;   // px/s (perto da velocidade do jogador: 220px/s)
+    this.detectionRadius = 200;
+    this.leashRadius = 300;  // além desse raio, desiste e volta a patrulhar
 
     this.maxHealth = 60;
     this.health = this.maxHealth;
