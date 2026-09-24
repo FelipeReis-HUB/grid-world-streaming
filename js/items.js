@@ -37,9 +37,15 @@ class Item {
     ctx.save();
 
     if (this.type === ITEM_TYPES.SCORE) {
+      // Halo como círculo translúcido em vez de ctx.shadowBlur: com até ~36
+      // itens na tela ao mesmo tempo, shadowBlur (não acelerado por GPU na
+      // maioria dos navegadores) pesa bem mais que um fill extra simples.
+      ctx.fillStyle = 'rgba(245, 166, 35, 0.30)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, this.radius + 5, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.fillStyle = '#f5a623';
-      ctx.shadowColor = '#f5a623';
-      ctx.shadowBlur = 10;
       ctx.beginPath();
       ctx.moveTo(sx, sy - this.radius);
       ctx.lineTo(sx + this.radius, sy);
@@ -50,11 +56,14 @@ class Item {
     } else {
       const isMedkit = this.type === ITEM_TYPES.MEDKIT;
       const boxColor = isMedkit ? '#2fbf71' : '#f5d90a';
+      const haloColor = isMedkit ? 'rgba(47, 191, 113, 0.30)' : 'rgba(245, 217, 10, 0.30)';
+      ctx.fillStyle = haloColor;
+      ctx.beginPath();
+      ctx.arc(sx, sy, this.radius + 5, 0, Math.PI * 2);
+      ctx.fill();
+
       ctx.fillStyle = boxColor;
-      ctx.shadowColor = boxColor;
-      ctx.shadowBlur = 10;
       ctx.fillRect(sx - this.radius, sy - this.radius, this.radius * 2, this.radius * 2);
-      ctx.shadowBlur = 0;
       ctx.fillStyle = '#0b0e14';
       ctx.font = 'bold 13px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';

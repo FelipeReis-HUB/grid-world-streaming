@@ -66,9 +66,13 @@ class Player {
     const sx = this.x - camera.x;
     const sy = this.y - camera.y;
     ctx.save();
+    // Halo como círculo translúcido em vez de ctx.shadowBlur (ver npc.js)
+    ctx.fillStyle = 'rgba(79, 209, 197, 0.35)';
+    ctx.beginPath();
+    ctx.arc(sx, sy, this.radius + 5, 0, Math.PI * 2);
+    ctx.fill();
+
     ctx.fillStyle = '#4fd1c5';
-    ctx.shadowColor = '#4fd1c5';
-    ctx.shadowBlur = 12;
     ctx.beginPath();
     ctx.arc(sx, sy, this.radius, 0, Math.PI * 2);
     ctx.fill();

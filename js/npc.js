@@ -110,10 +110,21 @@ class NPC {
     const sx = this.x - camera.x;
     const sy = this.y - camera.y;
     const flashing = now < this.hitFlashUntil;
+    const chasing = this.state === NPC_STATE.CHASE;
     ctx.save();
-    ctx.fillStyle = flashing ? '#ffffff' : (this.state === NPC_STATE.CHASE ? '#ef4565' : '#c23a52');
-    ctx.shadowColor = this.state === NPC_STATE.CHASE ? '#ef4565' : 'transparent';
-    ctx.shadowBlur = this.state === NPC_STATE.CHASE ? 14 : 0;
+
+    // Halo de "perseguindo" como círculo translúcido, não ctx.shadowBlur:
+    // shadowBlur não é acelerado por GPU na maioria dos navegadores e o custo
+    // por forma é alto — com dezenas de NPCs perseguindo ao mesmo tempo (o
+    // cenário mais comum de usar a munição), isso travava a aba inteira.
+    if (chasing && !flashing) {
+      ctx.fillStyle = 'rgba(239, 69, 101, 0.30)';
+      ctx.beginPath();
+      ctx.arc(sx, sy, this.radius + 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.fillStyle = flashing ? '#ffffff' : (chasing ? '#ef4565' : '#c23a52');
     ctx.beginPath();
     ctx.arc(sx, sy, this.radius, 0, Math.PI * 2);
     ctx.fill();
